@@ -24,6 +24,13 @@ namespace Withus
 
         }
 
+        #region LoginForm Event
+        private void LoginForm_Closing(object sender, FormClosingEventArgs e)
+        {
+            Process.GetCurrentProcess().Kill();
+        }
+        #endregion
+
         #region UI Event 
         // UI EVENT FUCNTION START
 
@@ -95,5 +102,7 @@ namespace Withus
         }
 
         #endregion
+
+        
     }
 }

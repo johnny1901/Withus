@@ -135,7 +135,7 @@
             // ProgramClose_Menu
             // 
             this.ProgramClose_Menu.Name = "ProgramClose_Menu";
-            this.ProgramClose_Menu.Size = new System.Drawing.Size(180, 22);
+            this.ProgramClose_Menu.Size = new System.Drawing.Size(150, 22);
             this.ProgramClose_Menu.Text = "프로그램 종료";
             this.ProgramClose_Menu.Click += new System.EventHandler(this.ProgramKill_ClickEvent);
             // 
@@ -151,14 +151,14 @@
             // HelpCenter_Menu
             // 
             this.HelpCenter_Menu.Name = "HelpCenter_Menu";
-            this.HelpCenter_Menu.Size = new System.Drawing.Size(180, 22);
+            this.HelpCenter_Menu.Size = new System.Drawing.Size(150, 22);
             this.HelpCenter_Menu.Text = "도움말 보기";
             this.HelpCenter_Menu.Click += new System.EventHandler(this.HelpCenterView_ClickEvent);
             // 
             // FeedBack_Menu
             // 
             this.FeedBack_Menu.Name = "FeedBack_Menu";
-            this.FeedBack_Menu.Size = new System.Drawing.Size(180, 22);
+            this.FeedBack_Menu.Size = new System.Drawing.Size(150, 22);
             this.FeedBack_Menu.Text = "피드백 보내기";
             this.FeedBack_Menu.Click += new System.EventHandler(this.FeedBack_ClickEvent);
             // 
@@ -179,6 +179,7 @@
             this.Name = "LoginForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "데이터 관리 프로그램";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LoginForm_Closing);
             this.Load += new System.EventHandler(this.LoginForm_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
