@@ -13,7 +13,9 @@ namespace Withus
     {
         private static string connectionString = "Server=192.168.219.100;Database=Withus;User ID=user;Password=a123123a";
         SqlConnection connection = new SqlConnection(connectionString);
-        SqlCommand command = new SqlCommand();
+        SqlCommand command = new SqlCommand();       
+
+        
 
         public int InsertUserData()
         {   //테스트 목적 코드
@@ -74,5 +76,6 @@ namespace Withus
                 return 3;
             }
         }
+              
     }
 }
