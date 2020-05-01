@@ -14,6 +14,7 @@ namespace Withus
 {
     public partial class LoginForm : Form
     {
+        bool loginPass = false;
         public LoginForm()
         {
             InitializeComponent();
@@ -27,7 +28,10 @@ namespace Withus
         #region LoginForm Event
         private void LoginForm_Closing(object sender, FormClosingEventArgs e)
         {
-            Process.GetCurrentProcess().Kill();
+            if (loginPass == false)
+            {
+                Process.GetCurrentProcess().Kill();
+            }                       
         }
         #endregion
 
@@ -44,6 +48,7 @@ namespace Withus
             if (loginResult == 1)
             {
                 MessageBox.Show("로그인 성공");
+                loginPass = true;
                 MainForm mf = new MainForm();
                 mf.Show();
                 this.Close();
