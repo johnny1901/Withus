@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -15,6 +16,13 @@ namespace Withus
     public partial class LoginForm : Form
     {
         bool loginPass = false;
+
+        private static string connectionString = "Server=192.168.219.100;Database=Withus;User ID=user;Password=a123123a";
+        SqlConnection connection = new SqlConnection(connectionString);
+        SqlCommand command = new SqlCommand();
+
+
+
         public LoginForm()
         {
             InitializeComponent();
@@ -23,6 +31,43 @@ namespace Withus
         private void LoginForm_Load(object sender, EventArgs e)
         {
 
+        }        
+        private int UserLoginConnection(string account, string password)
+        {
+            command.Parameters.Clear();
+            string query = $"SELECT UserAccount, UserPassword FROM Users " +
+                $"WHERE UserAccount=@P1 AND UserPassword=@P2";
+
+            command.Parameters.Add("@P1", SqlDbType.VarChar, 50).Value = account;
+            command.Parameters.Add("@P2", SqlDbType.VarChar, 50).Value = password;
+
+            command.Connection = connection;
+            command.CommandText = query;
+
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        if (account == reader.GetString(0) && password == reader.GetString(1))
+                        {
+                            connection.Close();
+                            return 1;
+                        }
+                    }
+                }
+                connection.Close();
+                return 2;
+            }
+            catch
+            {
+                connection.Close();
+                return 3;
+            }
         }
 
         #region LoginForm Event
@@ -31,35 +76,42 @@ namespace Withus
             if (loginPass == false)
             {
                 Process.GetCurrentProcess().Kill();
-            }                       
+            }
         }
         #endregion
 
         #region UI Event 
         // UI EVENT FUCNTION START
-
+                
         private void UserLogin_Button_Click(object sender, EventArgs e)
         {
-            string userAccount = InputUserAccount_TextBox.Text;
-            string userPassword = InputUserPassword_TextBox.Text;
-            DBcontext DBC = new DBcontext();
-            int loginResult = DBC.TryUserLogin(userAccount, userPassword);
 
-            if (loginResult == 1)
+            if (InputUserPassword_TextBox.Text == "")
             {
-                MessageBox.Show("로그인 성공");
-                loginPass = true;
-                MainForm mf = new MainForm();
-                mf.Show();
-                this.Close();
+                MessageBox.Show("비밀번호를 입력하세요.");
             }
-            if (loginResult == 2)
+            if (InputUserPassword_TextBox.Text != "")
             {
-                MessageBox.Show("사용자 ID/PASSWORD를 확인 해주세요.");
-            }
-            if (loginResult == 3)
-            {
-                MessageBox.Show("서버 오류");
+                string userAccount = InputUserAccount_TextBox.Text;
+                string userPassword = InputUserPassword_TextBox.Text;
+                int result = UserLoginConnection(userAccount, userPassword);
+
+                switch (result)
+                {
+                    case 1:
+                            MessageBox.Show("로그인 성공");
+                            loginPass = true;
+                            MainForm mf = new MainForm();
+                            mf.Show();
+                            this.Close();
+                            break;
+                    case 2:
+                            MessageBox.Show("로그인 실패");
+                            break;
+                    case 3:
+                            MessageBox.Show("서버 오류");
+                            break;
+                }                
             }
         }
 
@@ -108,6 +160,5 @@ namespace Withus
 
         #endregion
 
-        
     }
 }
