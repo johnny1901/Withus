@@ -43,8 +43,8 @@
             this.ProgramClose_Menu = new System.Windows.Forms.ToolStripMenuItem();
             this.편집ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DataAdd_Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataEdit_Menu = new System.Windows.Forms.ToolStripMenuItem();
-            this.DataDelete_Menu = new System.Windows.Forms.ToolStripMenuItem();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -59,6 +59,7 @@
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.Size = new System.Drawing.Size(718, 299);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellContent_DoubleClick);
             // 
             // TableLookUp_Button
             // 
@@ -169,15 +170,13 @@
             // ProgramClose_Menu
             // 
             this.ProgramClose_Menu.Name = "ProgramClose_Menu";
-            this.ProgramClose_Menu.Size = new System.Drawing.Size(180, 22);
+            this.ProgramClose_Menu.Size = new System.Drawing.Size(150, 22);
             this.ProgramClose_Menu.Text = "프로그램 종료";
             // 
             // 편집ToolStripMenuItem
             // 
             this.편집ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.DataAdd_Menu,
-            this.DataEdit_Menu,
-            this.DataDelete_Menu});
+            this.DataAdd_Menu});
             this.편집ToolStripMenuItem.Name = "편집ToolStripMenuItem";
             this.편집ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.편집ToolStripMenuItem.Text = "편집";
@@ -185,26 +184,37 @@
             // DataAdd_Menu
             // 
             this.DataAdd_Menu.Name = "DataAdd_Menu";
-            this.DataAdd_Menu.Size = new System.Drawing.Size(180, 22);
+            this.DataAdd_Menu.Size = new System.Drawing.Size(138, 22);
             this.DataAdd_Menu.Text = "데이터 등록";
+            this.DataAdd_Menu.Click += new System.EventHandler(this.DataAddMenu_ClickEvent);
             // 
-            // DataEdit_Menu
+            // label1
             // 
-            this.DataEdit_Menu.Name = "DataEdit_Menu";
-            this.DataEdit_Menu.Size = new System.Drawing.Size(180, 22);
-            this.DataEdit_Menu.Text = "데이터 수정";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(118, 279);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(169, 12);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "데이터 수정 결과 상태 입니다.";
+            this.label1.Visible = false;
             // 
-            // DataDelete_Menu
+            // label2
             // 
-            this.DataDelete_Menu.Name = "DataDelete_Menu";
-            this.DataDelete_Menu.Size = new System.Drawing.Size(180, 22);
-            this.DataDelete_Menu.Text = "데이터 삭제";
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(118, 300);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(245, 12);
+            this.label2.TabIndex = 12;
+            this.label2.Text = "계속 이용 하시려면 새로운 조회를 해주세요.";
+            this.label2.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(742, 363);
+            this.ClientSize = new System.Drawing.Size(742, 362);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.LastPage_Button);
             this.Controls.Add(this.NextPage_Button);
             this.Controls.Add(this.PageState_Label);
@@ -229,8 +239,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button TableLookUp_Button;
         private System.Windows.Forms.Label RowCounting_Label;
         private System.Windows.Forms.TextBox InputRowCount_TextBox;
@@ -245,7 +253,8 @@
         private System.Windows.Forms.ToolStripMenuItem ProgramClose_Menu;
         private System.Windows.Forms.ToolStripMenuItem 편집ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DataAdd_Menu;
-        private System.Windows.Forms.ToolStripMenuItem DataEdit_Menu;
-        private System.Windows.Forms.ToolStripMenuItem DataDelete_Menu;
+        public System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }

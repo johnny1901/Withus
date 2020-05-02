@@ -12,13 +12,13 @@ using System.Windows.Forms;
 namespace Withus
 {
     public partial class MainForm : Form
-    {
+    {        
         private static string connectionString = "Server=192.168.219.100;Database=Withus;User ID=user;Password=a123123a";
         SqlConnection connection = new SqlConnection(connectionString);
         SqlCommand command = new SqlCommand();
         SqlDataAdapter dataAdapter;
         DataSet dataSet;
-        DataTable dataTable;
+        DataTable dataTable;       
 
         int PageCount;
         int maxRec;
@@ -30,7 +30,6 @@ namespace Withus
         {
             InitializeComponent();
         }
-
         
         private void LoadPage()
         {
@@ -38,7 +37,6 @@ namespace Withus
             int startRec;
             int endRec;
             DataTable dtTemp;
-            //Clone the source table to create a temporary table.
             dtTemp = dataTable.Clone();
             if (currentPage == PageCount)
             {
@@ -49,9 +47,8 @@ namespace Withus
                 endRec = pageSize * currentPage;
             }
             startRec = recNo;
-            //Copy rows from the source table to fill the temporary table.
             for (i = startRec; i < endRec; i++)
-            {
+            {                
                 dtTemp.ImportRow(dataTable.Rows[i]);
                 recNo += 1;
             }
@@ -66,7 +63,7 @@ namespace Withus
         {
             if (pageSize == 0)
             {
-                MessageBox.Show("Row값을 입력하세요.");
+                MessageBox.Show("수정 작업 후 결과 화면 입니다.\r\n 다시 조회 해주세요.");
                 return false;
             }
             else
@@ -76,8 +73,17 @@ namespace Withus
         }
 
         #region Button Click Event
-        private void TableLookUpButton_ClickEvent(object sender, EventArgs e)
+        public void TableLookUpButton_ClickEvent(object sender, EventArgs e)
         {
+            label1.Visible = false;
+            label2.Visible = false;
+
+            if (InputRowCount_TextBox.Text == string.Empty)
+            {
+                MessageBox.Show("Row 값을 입력 해주세요.");
+                return;
+            }
+        
             string query = "SELECT * FROM dbo.Users";
             dataAdapter = new SqlDataAdapter(query, connectionString);
             dataSet = new DataSet();
@@ -137,12 +143,10 @@ namespace Withus
         }
         private void NextPageButton_ClickEvent(object sender, EventArgs e)
         {
-            //If the user did not click the "Fill Grid" button, then return.
             if (CheckFillButton() == false)
             {
                 return;
             }
-            //Check if the user clicks the "Fill Grid" button.
             if (pageSize == 0)
             {
                 MessageBox.Show("ROW값을 입력 하세요.");
@@ -166,7 +170,6 @@ namespace Withus
             {
                 return;
             }
-            //Check if you are already at the last page.
             if (recNo == maxRec)
             {
                 MessageBox.Show("마지막 페이지 입니다.");
@@ -177,5 +180,68 @@ namespace Withus
             LoadPage();
         }
         #endregion
+
+        private void CellContent_DoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string selectPK = dataGridView1.Rows[e.RowIndex].Cells[0].FormattedValue.ToString();
+            
+            EditForm ef = new EditForm(selectPK, this);
+            ef.Show();
+        }
+
+        //수정 후 리플레쉬 용도
+        public int ResultView(string resultPK)
+        {            
+            string query = $"SELECT * FROM dbo.Users WHERE PK={resultPK}";
+            dataAdapter = new SqlDataAdapter(query, connectionString);
+            dataSet = new DataSet();
+            try
+            {
+                label1.Visible = true;
+                label2.Visible = true;
+                PageState_Label.Text = "1/1";
+                maxRec = 0;
+                pageSize = 0;
+                currentPage = 0;
+                recNo = 0;
+                dataAdapter.Fill(dataSet, "PK");
+                dataTable = dataSet.Tables["PK"];
+                dataGridView1.DataSource = dataTable;
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return 2;
+            }
+        }
+        
+        public void DeleteView()
+        {            
+            string query = "SELECT * FROM dbo.Users";
+            dataAdapter = new SqlDataAdapter(query, connectionString);
+            dataSet = new DataSet();
+            dataAdapter.Fill(dataSet, "PK");
+            dataTable = dataSet.Tables["PK"];
+
+            pageSize = Convert.ToInt32(InputRowCount_TextBox.Text);
+            maxRec = dataTable.Rows.Count;
+            PageCount = maxRec / pageSize;
+
+            if ((maxRec % pageSize) > 0)
+            {
+                PageCount += 1;
+            }
+
+            currentPage = 1;
+            recNo = 0;
+            LoadPage();       
+        }
+
+        private void DataAddMenu_ClickEvent(object sender, EventArgs e)
+        {
+            AddForm af = new AddForm();
+            af.Show();
+        }
     }
 }

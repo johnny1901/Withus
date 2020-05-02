@@ -21,8 +21,6 @@ namespace Withus
         SqlConnection connection = new SqlConnection(connectionString);
         SqlCommand command = new SqlCommand();
 
-
-
         public LoginForm()
         {
             InitializeComponent();
@@ -158,7 +156,6 @@ namespace Withus
             }
         }
 
-        #endregion
-
+        #endregion                
     }
 }
